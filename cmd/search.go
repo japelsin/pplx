@@ -130,8 +130,8 @@ func init() {
 
 	searchCmd.Flags().IntP(utils.MaxTokensKey, "m", 1000, "Maximum number of tokens to be used per request. Defaults to config value.")
 	searchCmd.Flags().IntP(utils.TemperatureKey, "t", 0, "The amount of randomness in the response. Between 0 and 2.")
-	searchCmd.Flags().IntP(utils.TopKKey, "K", 0, "Number of tokens to consider when generating tokens, lower values result in higher probability tokens being used. Between 0 and 2048.")
-	searchCmd.Flags().IntP(utils.TopPKey, "P", 0, "Nucleus sampling. Probability cutoff for token selection, lower values result in higher probability tokens being used. Between 0 and 1.")
-	searchCmd.Flags().IntP(utils.FrequencyPenaltyKey, "f", 0, "How much to penalize token reuse. 1 is no penalty. Between 0 and 1.")
-	searchCmd.Flags().IntP(utils.PresencePenaltyKey, "p", 0, "How much to penalize existing tokens. Between -2 and 2.")
+	searchCmd.Flags().IntP(utils.TopKKey, "K", 0, "Number of tokens to consider when generating tokens. Between 0 and 2048.")
+	searchCmd.Flags().IntP(utils.TopPKey, "P", 0, "Nucleus sampling. Probability cutoff for token selection. Between 0 and 1.")
+	searchCmd.Flags().IntP(utils.FrequencyPenaltyKey, "f", 0, "How much to penalize token frequency.")
+	searchCmd.Flags().IntP(utils.PresencePenaltyKey, "p", 0, "How much to penalize token presence. Between -2 and 2.")
 }

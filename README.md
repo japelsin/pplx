@@ -1,6 +1,9 @@
 # Perplexity CLI
 
-CLI for interfacing with [Perplexity](https://www.perplexity.ai/)'s API. Can also be used as a chatbot.
+[![Go](https://github.com/japelsin/pplx/actions/workflows/release.yml/badge.svg)](https://github.com/japelsin/pplx/actions/workflows/release.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/japelsin/pplx/blob/main/LICENSE)
+
+CLI for searching with [Perplexity](https://www.perplexity.ai/)'s API. Can also be used as a chatbot.
 
 ## Prerequisites
 
@@ -8,9 +11,7 @@ CLI for interfacing with [Perplexity](https://www.perplexity.ai/)'s API. Can als
 
 ## Installation
 
-### With Homebrew
-
-If you're using [Homebrew](https://brew.sh/):
+### With [Homebrew](https://brew.sh)
 
 ```bash
 brew install japelsin/tap/pplx
@@ -24,45 +25,48 @@ If you have [go](https://go.dev/) installed:
 go install github.com/japelsin/pplx@latest
 ```
 
-Otherwise you could grab the appropriate executable from releases.
+You could also grab the appropriate executable from [releases](https://github.com/japelsin/pplx/releases).
 
 ## Usage
 
 ### Search
 
-The response is always streamed, all other [parameters](https://docs.perplexity.ai/reference/post_chat_completions) are available. The model is set through the config (see below).
+Search command. Most parameters allowed by `pplx-api` are available as options. The model is set through the config (see below).
 
 ```
 Usage:
   pplx search [flags]
 
 Flags:
-  -f, --frequency_penalty int   How much to penalize token reuse. 1 is no penalty. Between 0 and 1.
   -m, --max_tokens int          Maximum number of tokens to be used per request. Defaults to config value. (default 1000)
-  -p, --presence_penalty int    How much to penalize existing tokens. Between -2 and 2.
+  -f, --frequency_penalty int   How much to penalize token frequency.
+  -p, --presence_penalty int    How much to penalize token presence. Between -2 and 2.
   -t, --temperature int         The amount of randomness in the response. Between 0 and 2.
-  -K, --top_k int               Number of tokens to consider when generating tokens, lower values result in higher probability tokens being used. Between 0 and 2048.
-  -P, --top_p int               Nucleus sampling. Probability cutoff for token selection, lower values result in higher probability tokens being used. Between 0 and 1.
+  -K, --top_k int               Number of tokens to consider when generating tokens. Between 0 and 2048.
+  -P, --top_p int               Nucleus sampling. Probability cutoff for token selection. Between 0 and 1.
 ```
+
+The API reference can be found [here](https://docs.perplexity.ai/reference/post_chat_completions).
 
 ### Config
 
-Configure `pplx`.
-
 ```
 Usage:
-pplx config [command]
+  pplx config [command]
 
 Available Commands:
-path        Get configuration file path
-reset       Reset config
-set         Set config value
+  path        Get configuration file path
+  reset       Reset config
+  set         Set config value
 ```
 
-#### Config values
+#### Config Values
 
-- **Additional instructions**: Instructions appended to queries. If you intend to use `pplx` as a search engine it's recommended to instruct it to always provide its sources.
+##### Additional Instructions
+Instructions appended to queries. If you intend to use `pplx` as a search engine it's recommended to instruct it to always provide its sources.
 
-- **Model**: Available models are: `pplx-7b-chat`, `pplx-70b-chat`, `pplx-7b-online`, `pplx-70b-online`, `llama-2-70b-chat`, `codellama-34b-instruct`, `codellama-70b-instruct`, `mistral-7b-instruct`, and `mixtral-8x7b-instruct`.
+##### Model
+Model to use. The available models are: `pplx-7b-chat`, `pplx-70b-chat`, `pplx-7b-online`, `pplx-70b-online`, `llama-2-70b-chat`, `codellama-34b-instruct`, `codellama-70b-instruct`, `mistral-7b-instruct`, and `mixtral-8x7b-instruct`.
 
-- **API Key**: Self explanatory
+##### API Key
+Self explanatory.
