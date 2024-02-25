@@ -97,7 +97,7 @@ var (
 		ValidArgs: availableModels,
 		Run: func(cmd *cobra.Command, args []string) {
 			value := ensureSelectValue("Model", args, availableModels)
-			updateConfigValue(utils.ApiKeyKey, value)
+			updateConfigValue(utils.ModelKey, value)
 		},
 	}
 )
