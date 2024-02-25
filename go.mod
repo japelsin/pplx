@@ -34,6 +34,6 @@ require (
 )
 
 retract (
-	v0.1.1
-	v0.1.0
+	v0.1.1 // Old repo
+	v0.1.0 // Old repo
 )
