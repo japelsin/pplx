@@ -127,10 +127,11 @@ var searchCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(searchCmd)
 
-	searchCmd.Flags().IntP(utils.MaxTokensKey, "m", 1000, "Maximum number of tokens to be used per request. Defaults to config value.")
-	searchCmd.Flags().IntP(utils.TemperatureKey, "t", 0, "The amount of randomness in the response. Between 0 and 2.")
-	searchCmd.Flags().IntP(utils.TopKKey, "K", 0, "Number of tokens to consider when generating tokens. Between 0 and 2048.")
-	searchCmd.Flags().IntP(utils.TopPKey, "P", 0, "Nucleus sampling. Probability cutoff for token selection. Between 0 and 1.")
-	searchCmd.Flags().IntP(utils.FrequencyPenaltyKey, "f", 0, "How much to penalize token frequency.")
-	searchCmd.Flags().IntP(utils.PresencePenaltyKey, "p", 0, "How much to penalize token presence. Between -2 and 2.")
+	searchCmd.Flags().Int(utils.MaxTokensKey, 1000, "Maximum number of tokens to be used per request. Defaults to config value.")
+	searchCmd.Flags().Int(utils.TemperatureKey, 0, "The amount of randomness in the response. Between 0 and 2.")
+	searchCmd.Flags().Int(utils.TopKKey, 0, "Number of tokens to consider when generating tokens. Between 0 and 2048.")
+	searchCmd.Flags().Int(utils.TopPKey, 0, "Nucleus sampling. Probability cutoff for token selection. Between 0 and 1.")
+	searchCmd.Flags().Int(utils.FrequencyPenaltyKey, 0, "How much to penalize token frequency.")
+	searchCmd.Flags().Int(utils.PresencePenaltyKey, 0, "How much to penalize token presence. Between -2 and 2.")
+	searchCmd.Flags().String(utils.ModelKey, "sonar-small-online", "Model to use. Default to config value.")
 }
