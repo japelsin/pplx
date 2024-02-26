@@ -66,7 +66,7 @@ Available Commands:
 Instructions appended to queries. If you intend to use `pplx` as a search engine it's recommended to instruct it to always provide its sources.
 
 ##### Model
-Model to use. The available models are: `pplx-7b-chat`, `pplx-70b-chat`, `pplx-7b-online`, `pplx-70b-online`, `llama-2-70b-chat`, `codellama-34b-instruct`, `codellama-70b-instruct`, `mistral-7b-instruct`, and `mixtral-8x7b-instruct`.
+Model to use. The available models are: `sonar-small-chat`, `sonar-small-online	`, `sonar-medium-chat`, `sonar-medium-online`, `llama-2-70b-chat`, `codellama-34b-instruct`, `codellama-70b-instruct`, `mistral-7b-instruct`, and `mixtral-8x7b-instruct`.
 
 ##### API Key
 Self explanatory.

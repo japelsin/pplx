@@ -8,6 +8,6 @@ func ResetConfig() {
 	viper.Set(AdditionalInstructionsKey, "")
 	viper.Set(ApiKeyKey, "")
 	viper.Set(MaxTokensKey, "1000")
-	viper.Set(ModelKey, "pplx-7b-chat")
+	viper.Set(ModelKey, "sonar-small-online")
 	viper.WriteConfig()
 }

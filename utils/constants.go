@@ -11,3 +11,5 @@ const (
 	PresencePenaltyKey        = "presence_penalty"
 	FrequencyPenaltyKey       = "frequency_penalty"
 )
+
+var AvailableModels = []string{"sonar-small-chat", "sonar-small-online", "sonar-medium-chat", "sonar-medium-online", "llama-2-70b-chat", "codellama-34b-instruct", "codellama-70b-instruct", "mistral-7b-instruct", "mixtral-8x7b-instruct"}
