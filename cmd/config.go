@@ -64,18 +64,8 @@ var configResetCmd = &cobra.Command{
 var configSetCmd = &cobra.Command{
 	Use:       "set",
 	Short:     "Set config value",
-	ValidArgs: []string{utils.AdditionalInstructionsKey, utils.ApiKeyKey, utils.ModelKey},
+	ValidArgs: []string{utils.ApiKeyKey, utils.ModelKey},
 	Args:      cobra.OnlyValidArgs,
-}
-
-var configSetAdditionalInstructionsCmd = &cobra.Command{
-	Use:   utils.AdditionalInstructionsKey,
-	Short: "Set additional instructions to include at the end of each query",
-	Args:  cobra.RangeArgs(0, 1),
-	Run: func(cmd *cobra.Command, args []string) {
-		value := ensureValue("Additional instructions", args)
-		updateConfigValue(utils.AdditionalInstructionsKey, value)
-	},
 }
 
 var configSetApiKeyCmd = &cobra.Command{
@@ -111,7 +101,6 @@ func init() {
 	configCmd.AddCommand(configSetCmd)
 
 	// Set subcommands
-	configSetCmd.AddCommand(configSetAdditionalInstructionsCmd)
 	configSetCmd.AddCommand(configSetApiKeyCmd)
 	configSetCmd.AddCommand(configSetModelCmd)
 }

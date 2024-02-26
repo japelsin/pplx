@@ -62,9 +62,7 @@ var searchCmd = &cobra.Command{
 		payload["stream"] = true
 		payload["model"] = viper.Get(utils.ModelKey)
 		payload["max_tokens"] = viper.Get(utils.MaxTokensKey)
-
-		additionalInstructions := viper.Get(utils.AdditionalInstructionsKey)
-		payload["messages"] = []perplexityPayloadMessage{{"user", fmt.Sprintf("%s %s", query, additionalInstructions)}}
+		payload["messages"] = []perplexityPayloadMessage{{"user", query}}
 
 		// Skip validation for now
 		cmd.Flags().VisitAll(func(flag *pflag.Flag) {
