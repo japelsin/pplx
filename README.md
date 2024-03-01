@@ -38,13 +38,13 @@ Usage:
   pplx search [flags]
 
 Flags:
-      --frequency_penalty int   How much to penalize token frequency.
-      --max_tokens int          Maximum number of tokens to be used per request. Defaults to config value. (default 1000)
-      --model string            Model to use. Default to config value. (default "sonar-small-online")
-      --presence_penalty int    How much to penalize token presence. Between -2 and 2.
-      --temperature int         The amount of randomness in the response. Between 0 and 2.
-      --top_k int               Number of tokens to consider when generating tokens. Between 0 and 2048.
-      --top_p int               Nucleus sampling. Probability cutoff for token selection. Between 0 and 1.
+  -f, --frequency_penalty int   Penalize token frequency
+  -l, --max_tokens int          Token limit per request (default 1000)
+  -m, --model string            Model to use (default "sonar-small-online")
+  -p, --presence_penalty int    Penalize token presence [-2, 2]
+  -t, --temperature int         Response randomness [0, 2]
+  -K, --top_k int               Number of tokens to sample from [0, 2048]
+  -P, --top_p int               Probability cutoff for token selection [0, 1]
 
 ```
 

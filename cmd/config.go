@@ -40,7 +40,7 @@ func updateConfigValue(key string, value string) {
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Configure pplx CLI",
+	Short: "Configure pplx",
 }
 
 var configPathCmd = &cobra.Command{
