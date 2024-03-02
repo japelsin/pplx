@@ -83,7 +83,6 @@ var searchCmd = &cobra.Command{
 		req, err := http.NewRequest("POST", url, bytes.NewReader(data))
 		cobra.CheckErr(err)
 
-		req.Header.Add("Accept", "application/json")
 		req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", viper.Get("api_key")))
 		req.Header.Add("Content-Type", "application/json")
 
@@ -128,10 +127,14 @@ func init() {
 	rootCmd.AddCommand(searchCmd)
 
 	searchCmd.Flags().IntP(utils.MaxTokensKey, "l", 1000, "Token limit per request")
-	searchCmd.Flags().IntP(utils.TemperatureKey, "t", 0, "Response randomness [0, 2]")
+	searchCmd.Flags().Float64P(utils.TemperatureKey, "t", 0, "Response randomness [0, 2.0]")
 	searchCmd.Flags().IntP(utils.TopKKey, "K", 0, "Number of tokens to sample from [0, 2048]")
-	searchCmd.Flags().IntP(utils.TopPKey, "P", 0, "Probability cutoff for token selection [0, 1]")
-	searchCmd.Flags().IntP(utils.FrequencyPenaltyKey, "f", 0, "Token frequency penalty")
-	searchCmd.Flags().IntP(utils.PresencePenaltyKey, "p", 0, "Token presence penalty [-2, 2]")
+	searchCmd.Flags().Float64P(utils.TopPKey, "P", 0, "Probability cutoff for token selection [0, 1.0]")
+	searchCmd.Flags().Float64P(utils.FrequencyPenaltyKey, "f", 0, "Token frequency penalty [0, 1.0]")
+	searchCmd.Flags().Float64P(utils.PresencePenaltyKey, "p", 0, "Token presence penalty [-2.0, 2.0]")
 	searchCmd.Flags().StringP(utils.ModelKey, "m", "sonar-small-online", "Model to use")
+
+	viper.BindPFlag(utils.MaxTokensKey, searchCmd.Flags().Lookup(utils.MaxTokensKey))
+	viper.BindPFlag(utils.TemperatureKey, searchCmd.Flags().Lookup(utils.TemperatureKey))
+	viper.BindPFlag(utils.ModelKey, searchCmd.Flags().Lookup(utils.ModelKey))
 }
