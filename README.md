@@ -38,14 +38,14 @@ Usage:
   pplx search [flags]
 
 Flags:
-  -f, --frequency_penalty int   Penalize token frequency
-  -l, --max_tokens int          Token limit per request (default 1000)
-  -m, --model string            Model to use (default "sonar-small-online")
-  -p, --presence_penalty int    Penalize token presence [-2, 2]
-  -t, --temperature int         Response randomness [0, 2]
-  -K, --top_k int               Number of tokens to sample from [0, 2048]
-  -P, --top_p int               Probability cutoff for token selection [0, 1]
-
+  -f, --frequency_penalty float   Token frequency penalty [0, 1.0]
+  -l, --max_tokens int            Token limit per request (default 1000)
+  -m, --model string              Model to use (default "sonar-small-online")
+  -p, --presence_penalty float    Token presence penalty [-2.0, 2.0]
+  -q, --query string              Your query
+  -t, --temperature float         Response randomness [0, 2.0]
+  -K, --top_k int                 Number of tokens to sample from [0, 2048]
+  -P, --top_p float               Probability cutoff for token selection [0, 1.0]
 ```
 
 The API reference can be found [here](https://docs.perplexity.ai/reference/post_chat_completions).

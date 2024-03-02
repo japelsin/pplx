@@ -45,6 +45,8 @@ type perplexityResult struct {
 	} `json:"choices"`
 }
 
+var query = ""
+
 var searchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search using Perplexity",
@@ -54,8 +56,12 @@ var searchCmd = &cobra.Command{
 		// Parse argument & flags
 		// ****************************************************
 
-		query, err := utils.Prompt("Query")
-		cobra.CheckErr(err)
+		if query == "" {
+			promptQuery, err := utils.Prompt("Query")
+			cobra.CheckErr(err)
+
+			query = promptQuery
+		}
 
 		payload := perplexityPayload{}
 
@@ -127,12 +133,13 @@ func init() {
 	rootCmd.AddCommand(searchCmd)
 
 	searchCmd.Flags().IntP(utils.MaxTokensKey, "l", 1000, "Token limit per request")
-	searchCmd.Flags().Float64P(utils.TemperatureKey, "t", 0, "Response randomness [0, 2.0]")
+	searchCmd.Flags().Float64P(utils.TemperatureKey, "t", 0.7, "Response randomness [0, 2.0]")
 	searchCmd.Flags().IntP(utils.TopKKey, "K", 0, "Number of tokens to sample from [0, 2048]")
 	searchCmd.Flags().Float64P(utils.TopPKey, "P", 0, "Probability cutoff for token selection [0, 1.0]")
 	searchCmd.Flags().Float64P(utils.FrequencyPenaltyKey, "f", 0, "Token frequency penalty [0, 1.0]")
 	searchCmd.Flags().Float64P(utils.PresencePenaltyKey, "p", 0, "Token presence penalty [-2.0, 2.0]")
 	searchCmd.Flags().StringP(utils.ModelKey, "m", "sonar-small-online", "Model to use")
+	searchCmd.Flags().StringVarP(&query, utils.QueryKey, "q", "", "Your query")
 
 	viper.BindPFlag(utils.MaxTokensKey, searchCmd.Flags().Lookup(utils.MaxTokensKey))
 	viper.BindPFlag(utils.TemperatureKey, searchCmd.Flags().Lookup(utils.TemperatureKey))
