@@ -38,17 +38,21 @@ Usage:
   pplx search [flags]
 
 Flags:
-  -f, --frequency_penalty float   Token frequency penalty [0, 1.0]
-  -l, --max_tokens int            Token limit per request (default 1000)
-  -m, --model string              Model to use (default "sonar-small-online")
-  -p, --presence_penalty float    Token presence penalty [-2.0, 2.0]
-  -q, --query string              Your query
-  -t, --temperature float         Response randomness [0, 2.0]
-  -K, --top_k int                 Number of tokens to sample from [0, 2048]
-  -P, --top_p float               Probability cutoff for token selection [0, 1.0]
+  -a, --api_key string                     API Key
+  -f, --frequency_penalty float            Token frequency penalty [0, 1.0]
+  -l, --max_tokens int                     Token limit per request
+  -m, --model string                       Model to use
+  -p, --presence_penalty float             Token presence penalty [-2.0, 2.0]
+  -q, --query string                       Your query
+  -d, --search_domain_filter stringArray   Domain filter (e.g. '-d https://x.com -d https://y.com')
+  -r, --search_recency_filter string       Recency filter (month, week, day or hour)
+  -s, --system_prompt string               System prompt
+  -t, --temperature float                  Response randomness [0, 2.0]
+  -K, --top_k int                          Number of tokens to sample from [0, 2048]
+  -P, --top_p float                        Probability cutoff for token selection [0, 1.0]
 ```
 
-The API reference can be found [here](https://docs.perplexity.ai/reference/post_chat_completions).
+The API reference can be found [here](https://docs.perplexity.ai/api-reference/chat-completions).
 
 ### Config
 
@@ -59,5 +63,5 @@ Usage:
 Available Commands:
   path        Get configuration file path
   reset       Reset config
-  set         Set config value
+  set         Set config values
 ```
