@@ -3,13 +3,13 @@ package cmd
 import (
 	"os"
 
-	"github.com/japelsin/pplx/utils"
+	"github.com/japelsin/pplx/config"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
 	Use:   "pplx",
-	Short: "Simple CLI for interfacing with Perplexity search",
+	Short: "Simple CLI for interfacing with Perplexity's API",
 }
 
 func Execute() {
@@ -20,5 +20,6 @@ func Execute() {
 }
 
 func init() {
-	utils.InitConfig()
+	err := config.Init()
+	cobra.CheckErr(err)
 }

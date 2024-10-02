@@ -2,9 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
-	"github.com/japelsin/pplx/utils"
+	"github.com/japelsin/pplx/config"
+	"github.com/japelsin/pplx/constants"
+	"github.com/japelsin/pplx/validation"
 	"github.com/kirsle/configdir"
+	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +17,12 @@ func ensureValue(label string, args []string) string {
 		return args[0]
 	}
 
-	result, err := utils.Prompt(label)
+	prompt := promptui.Prompt{
+		Label:    label,
+		Validate: validation.ValidateRequired,
+	}
+
+	result, err := prompt.Run()
 	cobra.CheckErr(err)
 
 	return result
@@ -24,7 +33,12 @@ func ensureSelectValue(label string, args []string, items []string) string {
 		return args[0]
 	}
 
-	_, result, err := utils.PromptSelect(label, items)
+	prompt := promptui.Select{
+		Label: label,
+		Items: items,
+	}
+
+	_, result, err := prompt.Run()
 	cobra.CheckErr(err)
 
 	return result
@@ -49,55 +63,86 @@ var configResetCmd = &cobra.Command{
 	Short: "Reset config",
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		utils.ResetConfig()
+		config.Reset()
 	},
 }
 
 var configSetCmd = &cobra.Command{
 	Use:       "set",
-	Short:     "Set config value",
-	ValidArgs: []string{utils.ApiKeyKey, utils.MaxTokensKey, utils.ModelKey, utils.TemperatureKey},
+	Short:     "Set config values",
+	ValidArgs: constants.CONFIG_KEYS,
 	Args:      cobra.OnlyValidArgs,
 }
 
 var configSetApiKeyCmd = &cobra.Command{
-	Use:   utils.ApiKeyKey,
+	Use:   constants.API_KEY_KEY,
 	Short: "Set API key",
 	Args:  cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
 		value := ensureValue("API key", args)
-		utils.UpdateConfigValue(utils.ApiKeyKey, value)
+		config.SetApiKey(value)
+
+		err := config.Save()
+		cobra.CheckErr(err)
 	},
 }
 
 var configSetMaxTokensCmd = &cobra.Command{
-	Use:   utils.MaxTokensKey,
+	Use:   constants.MAX_TOKENS_KEY,
 	Short: "Set default max tokens",
 	Args:  cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
 		value := ensureValue("Max tokens", args)
-		utils.UpdateConfigValue(utils.MaxTokensKey, value)
+
+		v, _ := strconv.Atoi(value) // Already validated
+		config.SetMaxTokens(v)
+
+		err := config.Save()
+		cobra.CheckErr(err)
 	},
 }
 
 var configSetModelCmd = &cobra.Command{
-	Use:       utils.ModelKey,
+	Use:       constants.MODEL_KEY,
 	Short:     "Set default model",
 	Args:      cobra.RangeArgs(0, 1),
-	ValidArgs: utils.AvailableModels,
+	ValidArgs: constants.AVAILABLE_MODELS,
 	Run: func(cmd *cobra.Command, args []string) {
-		value := ensureSelectValue("Model", args, utils.AvailableModels)
-		utils.UpdateConfigValue(utils.ModelKey, value)
+		value := ensureSelectValue("Model", args, constants.AVAILABLE_MODELS)
+		config.SetModel(value)
+
+		err := config.Save()
+		cobra.CheckErr(err)
 	},
 }
 
-var configSetTemperatureCmd = &cobra.Command{
-	Use:   utils.TemperatureKey,
-	Short: "Set default temperature",
-	Args:  cobra.RangeArgs(0, 1),
+var STREAM_OPTIONS = []string{"Yes", "No"}
+
+var configSetStreamCmd = &cobra.Command{
+	Use:       constants.STREAM_KEY,
+	Short:     "Set whether to stream response",
+	Args:      cobra.RangeArgs(0, 1),
+	ValidArgs: STREAM_OPTIONS,
 	Run: func(cmd *cobra.Command, args []string) {
-		value := ensureValue("Temperature", args)
-		utils.UpdateConfigValue(utils.TemperatureKey, value)
+		value := ensureSelectValue("Stream response", args, STREAM_OPTIONS)
+		config.SetStream(value == "Yes")
+
+		err := config.Save()
+		cobra.CheckErr(err)
+	},
+}
+
+var configSetSystemPromptCmd = &cobra.Command{
+	Use:       constants.SYSTEM_PROMPT_KEY,
+	Short:     "Set default system prompt",
+	Args:      cobra.RangeArgs(0, 1),
+	ValidArgs: constants.AVAILABLE_MODELS,
+	Run: func(cmd *cobra.Command, args []string) {
+		value := ensureSelectValue("Model", args, constants.AVAILABLE_MODELS)
+		config.SetModel(value)
+
+		err := config.Save()
+		cobra.CheckErr(err)
 	},
 }
 
@@ -113,5 +158,6 @@ func init() {
 	configSetCmd.AddCommand(configSetApiKeyCmd)
 	configSetCmd.AddCommand(configSetMaxTokensCmd)
 	configSetCmd.AddCommand(configSetModelCmd)
-	configSetCmd.AddCommand(configSetTemperatureCmd)
+	configSetCmd.AddCommand(configSetStreamCmd)
+	configSetCmd.AddCommand(configSetSystemPromptCmd)
 }
