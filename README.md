@@ -31,7 +31,7 @@ You could also grab the appropriate executable from [releases](https://github.co
 
 ### Search
 
-Search command. Most parameters allowed by `pplx-api` are available as options. The model is set through the config (see below).
+Search command. Most parameters allowed by the [Perplexity API](https://docs.perplexity.ai/api-reference/chat-completions) are available as options. The defaults for some flags can also be set through the config (see below).
 
 ```
 Usage:
@@ -52,16 +52,18 @@ Flags:
   -P, --top_p float                        Probability cutoff for token selection [0, 1.0]
 ```
 
-The API reference can be found [here](https://docs.perplexity.ai/api-reference/chat-completions).
-
 ### Config
+
+The following config options are available:
 
 ```
 Usage:
-  pplx config [command]
+  pplx config set [command]
 
 Available Commands:
-  path        Get configuration file path
-  reset       Reset config
-  set         Set config values
+  api_key       Set API key
+  max_tokens    Set default max tokens
+  model         Set default model
+  stream        Set whether to stream response
+  system_prompt Set default system prompt
 ```
