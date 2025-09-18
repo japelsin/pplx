@@ -3,7 +3,7 @@ package constants
 const (
 	API_KEY_KEY               = "api_key"
 	DEFAULT_MAX_TOKENS        = 1000
-	DEFAULT_MODEL             = "llama-3.1-sonar-small-128k-online"
+	DEFAULT_MODEL             = "sonar"
 	FREQUENCY_PENALTY_KEY     = "frequency_penalty"
 	MAX_TOKENS_KEY            = "max_tokens"
 	MODEL_KEY                 = "model"
@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	AVAILABLE_MODELS       = []string{DEFAULT_MODEL, "llama-3.1-sonar-large-128k-online", "llama-3.1-sonar-small-128k-chat", "llama-3.1-sonar-large-128k-chat"}
+	AVAILABLE_MODELS       = []string{DEFAULT_MODEL, "sonar-pro", "sonar-pro", "sonar-pro", "sonar-reasoning-pro"}
 	CONFIG_KEYS            = []string{API_KEY_KEY, MAX_TOKENS_KEY, MODEL_KEY, STREAM_KEY, SYSTEM_PROMPT_KEY}
 	SEARCH_RECENCY_FILTERS = []string{"month", "week", "day", "hour"}
 )
