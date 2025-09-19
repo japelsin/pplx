@@ -2,6 +2,7 @@ package validation
 
 import (
 	"errors"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -26,11 +27,10 @@ func ValidateRequired(value string) error {
 }
 
 func ValidateRecencyFilter(value string) error {
-	for _, recencyFilter := range constants.SEARCH_RECENCY_FILTERS {
-		if value == recencyFilter {
-			return nil
-		}
+	isValidRecencyFilter := slices.Contains(constants.SEARCH_RECENCY_FILTERS, value)
+	if !isValidRecencyFilter {
+		return errors.New("Invalid recency filter, must be one of: " + strings.Join(constants.SEARCH_RECENCY_FILTERS[:], ", "))
 	}
 
-	return errors.New("Invalid recency filter, must be one of: " + strings.Join(constants.SEARCH_RECENCY_FILTERS[:], ", "))
+	return nil
 }

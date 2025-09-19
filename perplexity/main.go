@@ -11,7 +11,7 @@ import (
 type Client struct {
 	ApiKey   string
 	Messages []Message
-	Payload  map[string]interface{}
+	Payload  map[string]any
 }
 
 type Message struct {
@@ -47,7 +47,7 @@ func NewClient(apiKey string) *Client {
 	return &Client{
 		ApiKey:   apiKey,
 		Messages: []Message{},
-		Payload:  make(map[string]interface{}),
+		Payload:  make(map[string]any),
 	}
 }
 
@@ -120,20 +120,23 @@ func (c *Client) MakeStreamedRequest(callback func(string)) (*Result, error) {
 
 	for scanner.Scan() {
 		bytes := scanner.Bytes()
-		bytesLen := len(bytes)
+		minLen := len("data: ")
 
-		// There's probably a better way to do this
-		if bytesLen > 6 {
-			err := json.Unmarshal(bytes[6:], &result)
-			if err != nil {
-				return nil, err
-			}
-
-			message := result.Choices[0].Message.Content
-			callback(message[prevLen:])
-
-			prevLen = len(message)
+		if len(bytes) < minLen {
+			continue
 		}
+
+		data := bytes[minLen:]
+
+		err := json.Unmarshal(data, &result)
+		if err != nil {
+			return nil, err
+		}
+
+		message := result.Choices[0].Message.Content
+		callback(message[prevLen:])
+
+		prevLen = len(message)
 	}
 
 	defer response.Body.Close()

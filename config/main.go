@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-type config struct{}
-
 func Init() error {
 	configPath := configdir.LocalConfig()
 
@@ -36,35 +34,35 @@ func SetApiKey(value string) {
 }
 
 func GetMaxTokens() int {
-	return viper.GetInt(constants.MAX_TOKENS_KEY)
+	return viper.GetInt(constants.MAX_TOKENS_CONFIG_KEY)
 }
 
 func SetMaxTokens(value int) {
-	viper.Set(constants.MAX_TOKENS_KEY, value)
+	viper.Set(constants.MAX_TOKENS_CONFIG_KEY, value)
 }
 
 func GetModel() string {
-	return viper.GetString(constants.MODEL_KEY)
+	return viper.GetString(constants.MODEL_CONFIG_KEY)
 }
 
 func SetModel(value string) {
-	viper.Set(constants.MODEL_KEY, value)
+	viper.Set(constants.MODEL_CONFIG_KEY, value)
 }
 
 func GetSystemPrompt() string {
-	return viper.GetString(constants.SYSTEM_PROMPT_KEY)
+	return viper.GetString(constants.SYSTEM_PROMPT_CONFIG_KEY)
 }
 
 func SetSystemPrompt(value string) {
-	viper.Set(constants.SYSTEM_PROMPT_KEY, value)
+	viper.Set(constants.SYSTEM_PROMPT_CONFIG_KEY, value)
 }
 
 func GetStream() bool {
-	return viper.GetBool(constants.STREAM_KEY)
+	return viper.GetBool(constants.STREAM_CONFIG_KEY)
 }
 
 func SetStream(value bool) {
-	viper.Set(constants.STREAM_KEY, value)
+	viper.Set(constants.STREAM_CONFIG_KEY, value)
 }
 
 func Save() error {
@@ -75,7 +73,7 @@ func Reset() error {
 	SetApiKey("")
 	SetMaxTokens(constants.DEFAULT_MAX_TOKENS)
 	SetModel(constants.DEFAULT_MODEL)
-	SetSystemPrompt("")
+	SetSystemPrompt(constants.DEFAULT_SYSTEM_PROMPT)
 	SetStream(true)
 
 	return viper.SafeWriteConfig()
