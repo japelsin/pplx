@@ -75,7 +75,7 @@ var configSetCmd = &cobra.Command{
 }
 
 var configSetApiKeyCmd = &cobra.Command{
-	Use:   constants.API_KEY_KEY,
+	Use:   constants.API_KEY_CONFIG_KEY,
 	Short: "Set API key",
 	Args:  cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -88,7 +88,7 @@ var configSetApiKeyCmd = &cobra.Command{
 }
 
 var configSetMaxTokensCmd = &cobra.Command{
-	Use:   constants.MAX_TOKENS_KEY,
+	Use:   constants.MAX_TOKENS_CONFIG_KEY,
 	Short: "Set default max tokens",
 	Args:  cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -103,7 +103,7 @@ var configSetMaxTokensCmd = &cobra.Command{
 }
 
 var configSetModelCmd = &cobra.Command{
-	Use:       constants.MODEL_KEY,
+	Use:       constants.MODEL_CONFIG_KEY,
 	Short:     "Set default model",
 	Args:      cobra.RangeArgs(0, 1),
 	ValidArgs: constants.AVAILABLE_MODELS,
@@ -116,24 +116,8 @@ var configSetModelCmd = &cobra.Command{
 	},
 }
 
-var STREAM_OPTIONS = []string{"Yes", "No"}
-
-var configSetStreamCmd = &cobra.Command{
-	Use:       constants.STREAM_KEY,
-	Short:     "Set whether to stream response",
-	Args:      cobra.RangeArgs(0, 1),
-	ValidArgs: STREAM_OPTIONS,
-	Run: func(cmd *cobra.Command, args []string) {
-		value := ensureSelectValue("Stream response", args, STREAM_OPTIONS)
-		config.SetStream(value == "Yes")
-
-		err := config.Save()
-		cobra.CheckErr(err)
-	},
-}
-
 var configSetSystemPromptCmd = &cobra.Command{
-	Use:       constants.SYSTEM_PROMPT_KEY,
+	Use:       constants.SYSTEM_PROMPT_CONFIG_KEY,
 	Short:     "Set default system prompt",
 	Args:      cobra.RangeArgs(0, 1),
 	ValidArgs: constants.AVAILABLE_MODELS,
@@ -158,6 +142,5 @@ func init() {
 	configSetCmd.AddCommand(configSetApiKeyCmd)
 	configSetCmd.AddCommand(configSetMaxTokensCmd)
 	configSetCmd.AddCommand(configSetModelCmd)
-	configSetCmd.AddCommand(configSetStreamCmd)
 	configSetCmd.AddCommand(configSetSystemPromptCmd)
 }

@@ -11,7 +11,7 @@ import (
 type Client struct {
 	ApiKey   string
 	Messages []Message
-	Payload  map[string]interface{}
+	Payload  map[string]any
 }
 
 type Message struct {
@@ -23,7 +23,12 @@ type Result struct {
 	ID      string `json:"id"`
 	Model   string `json:"model"`
 	Created int    `json:"created"`
-	Usage   struct {
+	Error   struct {
+		Message string `json:"message"`
+		Type    string `json:"type"`
+		Code    int    `json:"code"`
+	} `json:"error"`
+	Usage struct {
 		PromptTokens     int `json:"prompt_tokens"`
 		CompletionTokens int `json:"completion_tokens"`
 		TotalTokens      int `json:"total_tokens"`
@@ -36,18 +41,19 @@ type Result struct {
 			Role    string `json:"role"`
 			Content string `json:"content"`
 		} `json:"message"`
-		Delta struct {
-			Role    string `json:"role"`
-			Content string `json:"content"`
-		} `json:"delta"`
 	} `json:"choices"`
+	SearchResults []struct {
+		Date  string `json:"date"`
+		Title string `json:"title"`
+		Url   string `json:"url"`
+	} `json:"search_results"`
 }
 
 func NewClient(apiKey string) *Client {
 	return &Client{
 		ApiKey:   apiKey,
 		Messages: []Message{},
-		Payload:  make(map[string]interface{}),
+		Payload:  make(map[string]any),
 	}
 }
 
@@ -84,7 +90,18 @@ func (c *Client) getResponse() (*http.Response, error) {
 		return response, err
 	}
 	if response.StatusCode != 200 {
-		return nil, errors.New("Request error: " + response.Status)
+		defer response.Body.Close()
+		result := &Result{}
+
+		err = json.NewDecoder(response.Body).Decode(result)
+		if err != nil {
+			return nil, err
+		}
+		if result.Error.Message == "" {
+			result.Error.Message = "Unknown error"
+		}
+
+		return nil, errors.New(response.Status + ": " + result.Error.Message)
 	}
 
 	return response, err
@@ -96,16 +113,16 @@ func (c *Client) MakeRequest() (*Result, error) {
 		return nil, err
 	}
 
-	result := Result{}
+	result := &Result{}
 
-	err = json.NewDecoder(response.Body).Decode(&result)
+	err = json.NewDecoder(response.Body).Decode(result)
 	defer response.Body.Close()
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return result, nil
 }
 
 func (c *Client) MakeStreamedRequest(callback func(string)) (*Result, error) {
@@ -114,28 +131,31 @@ func (c *Client) MakeStreamedRequest(callback func(string)) (*Result, error) {
 		return nil, err
 	}
 
-	result := Result{}
+	result := &Result{}
 	scanner := bufio.NewScanner(response.Body)
 	prevLen := 0
 
 	for scanner.Scan() {
 		bytes := scanner.Bytes()
-		bytesLen := len(bytes)
+		minLen := len("data: ")
 
-		// There's probably a better way to do this
-		if bytesLen > 6 {
-			err := json.Unmarshal(bytes[6:], &result)
-			if err != nil {
-				return nil, err
-			}
-
-			message := result.Choices[0].Message.Content
-			callback(message[prevLen:])
-
-			prevLen = len(message)
+		if len(bytes) < minLen {
+			continue
 		}
+
+		data := bytes[minLen:]
+
+		err := json.Unmarshal(data, result)
+		if err != nil {
+			return nil, err
+		}
+
+		message := result.Choices[0].Message.Content
+		callback(message[prevLen:])
+
+		prevLen = len(message)
 	}
 
 	defer response.Body.Close()
-	return &result, nil
+	return result, nil
 }
